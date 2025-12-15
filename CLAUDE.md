@@ -6,6 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository contains Claude Code skills for the ISCC (International Standard Content Code) ecosystem. Skills are packaged knowledge modules that extend Claude's capabilities for ISCC-related tasks.
 
+## Current Status
+
+**4 skills implemented:**
+- `iscc-brand-guidelines` - Brand colors, typography, logo assets for ISCC visual identity
+- `iscc-python-developer` - Python development guidance with ISCC libraries (uses DeepWiki)
+- `iscc-standards-expert` - ISO 24138:2024 specification knowledge (uses DeepWiki)
+- `iscc-toolkit` - 17 standalone PEP 723 scripts for ISCC operations (uvx-runnable)
+
+**Not yet implemented:**
+- `.skill` package files (zip archives for distribution)
+- Tests
+
 ## Repository Structure
 
 ```
@@ -13,9 +25,19 @@ iscc-skills/
 ├── .claude-plugin/marketplace.json  # Plugin metadata for skill distribution
 ├── skills/                          # Individual skill definitions
 │   ├── iscc-brand-guidelines/       # Brand colors, typography, logo assets
+│   │   ├── SKILL.md
+│   │   └── assets/                  # PNG logos and favicon
 │   ├── iscc-python-developer/       # Python development with ISCC libraries
-│   └── iscc-standards-expert/       # ISO 24138:2024 specification knowledge
-└── *.skill                          # Packaged skill files (zip archives)
+│   │   ├── SKILL.md
+│   │   └── references/              # Guidelines and repo documentation
+│   ├── iscc-standards-expert/       # ISO 24138:2024 specification knowledge
+│   │   └── SKILL.md
+│   └── iscc-toolkit/                # Standalone scripts for ISCC operations
+│       ├── SKILL.md
+│       ├── references/              # Usage guide
+│       └── tools/                   # 17 Python scripts (PEP 723)
+├── notes/                           # Design reference materials
+└── pyproject.toml                   # Project configuration (uv/ruff)
 ```
 
 ## Skill Architecture
@@ -24,19 +46,13 @@ Each skill is a directory containing:
 - `SKILL.md` - Main skill definition with YAML frontmatter (`name`, `description`) and markdown content
 - `references/` - Optional supporting documentation
 - `assets/` - Optional binary assets (images, etc.)
-
-The `.skill` files are zip archives of these directories for distribution.
+- `tools/` - Optional executable scripts (iscc-toolkit only)
 
 ## Commands
 
 ```bash
 # Development environment
-uv sync                    # Install dependencies
-uv run python main.py      # Run main entry point
-uv run pytest -q           # Run tests
-
-# Package a skill directory into .skill file
-# Skills are zip archives of the skill directory
+uv sync                    # Install dependencies (prek for packaging)
 ```
 
 ## DeepWiki Integration
