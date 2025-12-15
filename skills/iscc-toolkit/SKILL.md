@@ -5,7 +5,7 @@ description: Collection of standalone Python scripts (PEP 723) for common ISCC o
 
 # ISCC Toolkit
 
-A collection of **17 standalone Python scripts** for common ISCC (International Standard Content Code) operations. Each script uses PEP 723 inline metadata and runs directly with `uvx` without installation.
+A collection of **18 standalone Python scripts** for common ISCC (International Standard Content Code) operations. Each script uses PEP 723 inline metadata and runs directly with `uvx` without installation.
 
 ## Quick Start
 
@@ -36,6 +36,7 @@ uvx iscc_keypair.py --generate
 | `iscc_units.py` | Generate individual ISCC-UNITs (Meta, Content, Data, Instance) |
 | `iscc_batch.py` | Batch process directories with parallel execution |
 | `iscc_thumbnail.py` | Generate thumbnails from media files |
+| `iscc_text_extract.py` | Extract plaintext from media files (EPUB, PDF, DOCX) |
 
 ### Analysis Tools
 
@@ -172,6 +173,35 @@ Options:
 **Example:**
 ```bash
 uvx iscc_thumbnail.py video.mp4 --size 256x256 --output thumb.webp
+```
+
+### iscc_text_extract.py
+
+Extract plaintext from media files with optional ISCC normalization.
+
+```bash
+uvx iscc_text_extract.py <file> [options]
+
+Options:
+  --normalize, -n   Apply ic.text_clean() (same as iscc-sdk before gen_text_code)
+  --collapse        Apply ic.text_collapse() (aggressive: lowercase, no whitespace)
+  --output FILE     Write text to file (text only, no JSON)
+  --text-only       Output only text without JSON wrapper
+  --pretty          Pretty-print JSON output
+```
+
+**Supported formats:** EPUB, PDF, DOCX, and other text documents
+
+**Example:**
+```bash
+# Extract raw text
+uvx iscc_text_extract.py book.epub --text-only > book.txt
+
+# Extract with ISCC normalization (same as SDK uses internally)
+uvx iscc_text_extract.py document.pdf --normalize --output normalized.txt
+
+# Get JSON with stats
+uvx iscc_text_extract.py book.epub --normalize --pretty
 ```
 
 ### iscc_compare.py
@@ -477,7 +507,7 @@ uvx iscc_compare.py "$ISCC1" "$ISCC2" --pretty
 
 | Tools | Primary Package |
 |-------|-----------------|
-| iscc_generate, iscc_units, iscc_batch, iscc_thumbnail, iscc_metadata_*, iscc_detect | `iscc-sdk>=0.7.0` |
+| iscc_generate, iscc_units, iscc_batch, iscc_thumbnail, iscc_text_extract, iscc_metadata_*, iscc_detect | `iscc-sdk>=0.7.0` |
 | iscc_compare, iscc_inspect, iscc_validate, iscc_distance, iscc_normalize | `iscc-core>=1.0.0` |
 | iscc_keypair, iscc_sign, iscc_verify | `iscc-crypto>=0.3.0` |
 | iscc_declare, iscc_search | `httpx>=0.27.0` |

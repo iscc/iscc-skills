@@ -12,7 +12,7 @@ This repository contains Claude Code skills for the ISCC (International Standard
 - `iscc-brand-guidelines` - Brand colors, typography, logo assets for ISCC visual identity
 - `iscc-python-developer` - Python development guidance with ISCC libraries (uses DeepWiki)
 - `iscc-standards-expert` - ISO 24138:2024 specification knowledge (uses DeepWiki)
-- `iscc-toolkit` - 17 standalone PEP 723 scripts for ISCC operations (uvx-runnable)
+- `iscc-toolkit` - 18 standalone PEP 723 scripts for ISCC operations (uvx-runnable)
 
 **Not yet implemented:**
 - `.skill` package files (zip archives for distribution)
