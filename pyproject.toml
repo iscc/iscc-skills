@@ -1,0 +1,22 @@
+[project]
+name = "iscc-skills"
+version = "0.1.0"
+description = "Claude Code skills for the ISCC ecosystem"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "prek>=0.2.22",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4"]
+
+[tool.ruff.format]
+line-ending = "lf"
