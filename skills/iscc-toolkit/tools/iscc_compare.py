@@ -14,9 +14,9 @@ import sys
 
 try:
     import iscc_core as ic
-except ImportError:
+except ImportError:  # pragma: no cover
     print(
-        "Error: iscc-core is not installed. Install with: pip install iscc-core",
+        "Error: iscc-core is not installed. Run this script with: uvx iscc_compare.py",
         file=sys.stderr,
     )
     sys.exit(1)
@@ -37,7 +37,7 @@ def compare_iscc(iscc_a, iscc_b, pretty=False):
         comparison = ic.iscc_compare(iscc_a, iscc_b)
 
         # Calculate overall Hamming distance
-        distance = ic.hamming_distance(iscc_a, iscc_b)
+        distance = ic.iscc_distance(iscc_a, iscc_b)
 
         # Decompose both ISCCs to show unit structure
         units_a = ic.iscc_decompose(iscc_a)
@@ -141,5 +141,5 @@ Examples:
     sys.exit(0)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
