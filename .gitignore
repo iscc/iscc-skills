@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Pytest artifacts
+.coverage
+
 # AI
 .claude/
 
