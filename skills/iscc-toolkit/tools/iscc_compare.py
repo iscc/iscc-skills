@@ -5,7 +5,7 @@
 """Compare ISCCs and calculate similarity metrics.
 
 This script compares two ISCC codes and provides detailed similarity analysis
-including Hamming distance, unit-by-unit comparison, and similarity percentage.
+with per-unit-type breakdown. Output schema is aligned with search.iscc.id API.
 """
 
 import argparse
@@ -22,45 +22,72 @@ except ImportError:  # pragma: no cover
     sys.exit(1)
 
 
-def compare_iscc(iscc_a, iscc_b, pretty=False):
-    # type: (str, str, bool) -> dict
+# Maintype names for output
+MAINTYPE_NAMES = {
+    ic.MT.META: "meta",
+    ic.MT.SEMANTIC: "semantic",
+    ic.MT.CONTENT: "content",
+    ic.MT.DATA: "data",
+    ic.MT.INSTANCE: "instance",
+    ic.MT.ID: "id",
+}
+
+
+def compare_iscc(iscc_a, iscc_b):
+    # type: (str, str) -> dict
     """
-    Compare two ISCC codes and return detailed similarity metrics.
+    Compare two ISCCs and return similarity metrics per unit type.
 
     :param iscc_a: First ISCC code
     :param iscc_b: Second ISCC code
-    :param pretty: Whether to format output for human readability
-    :return: Dictionary containing comparison results
+    :return: Dictionary with score, types breakdown, and input codes
     """
     try:
-        # Perform comparison using iscc-core
-        comparison = ic.iscc_compare(iscc_a, iscc_b)
+        # Decompose both ISCCs into Code objects
+        units_a = [ic.Code(u) for u in ic.iscc_decompose(iscc_a)]
+        units_b = [ic.Code(u) for u in ic.iscc_decompose(iscc_b)]
 
-        # Calculate overall Hamming distance
-        distance = ic.iscc_distance(iscc_a, iscc_b)
+        types = {}
+        scores = []
 
-        # Decompose both ISCCs to show unit structure
-        units_a = ic.iscc_decompose(iscc_a)
-        units_b = ic.iscc_decompose(iscc_b)
+        # Find compatible unit pairs (same maintype, subtype, version)
+        for ca in units_a:
+            for cb in units_b:
+                cat = (ca.maintype, ca.subtype, ca.version)
+                cbt = (cb.maintype, cb.subtype, cb.version)
+                if cat != cbt:
+                    continue
 
-        # Calculate similarity percentage (0-100)
-        # Total bits compared
-        total_bits = min(len(iscc_a), len(iscc_b)) * 5  # Each base32 char = 5 bits
-        matching_bits = total_bits - distance
-        similarity_pct = (matching_bits / total_bits * 100) if total_bits > 0 else 0
+                type_name = MAINTYPE_NAMES.get(ca.maintype, ca.maintype.name.lower())
 
-        result = {
+                # Instance and ID types use exact match
+                if ca.maintype in (ic.MT.INSTANCE, ic.MT.ID):
+                    match = ca.hash_bytes == cb.hash_bytes
+                    types[type_name] = {"match": match}
+                    scores.append(1.0 if match else 0.0)
+                else:
+                    # Use NPH for normalized comparison of potentially different lengths
+                    nph = ic.iscc_nph_similarity(ca.hash_bytes, cb.hash_bytes)
+                    score = nph["similarity"]
+                    bits = nph["common_prefix_bits"]
+                    # Calculate distance from similarity and bits
+                    distance = round((1.0 - score) * bits)
+                    types[type_name] = {
+                        "score": round(score, 4),
+                        "distance": distance,
+                        "bits": bits,
+                    }
+                    scores.append(score)
+
+        # Calculate overall score (average of type scores)
+        overall_score = round(sum(scores) / len(scores), 4) if scores else None
+
+        return {
             "iscc_a": iscc_a,
             "iscc_b": iscc_b,
-            "hamming_distance": distance,
-            "similarity_percentage": round(similarity_pct, 2),
-            "units_a": units_a,
-            "units_b": units_b,
-            "matching_units": comparison.get("matching_units", []),
-            "comparison": comparison,
+            "score": overall_score,
+            "types": types,
         }
-
-        return result
 
     except Exception as e:
         return {"error": str(e), "iscc_a": iscc_a, "iscc_b": iscc_b}
@@ -78,24 +105,33 @@ def format_pretty(result):
         return f"ERROR: {result['error']}"
 
     lines = []
-    lines.append("=" * 60)
-    lines.append("ISCC Comparison Results")
-    lines.append("=" * 60)
-    lines.append(f"ISCC A: {result['iscc_a']}")
-    lines.append(f"ISCC B: {result['iscc_b']}")
-    lines.append("-" * 60)
-    lines.append(f"Hamming Distance: {result['hamming_distance']}")
-    lines.append(f"Similarity: {result['similarity_percentage']}%")
-    lines.append("-" * 60)
-    lines.append(f"Units in A: {len(result['units_a'])}")
-    for i, unit in enumerate(result["units_a"], 1):
-        lines.append(f"  {i}. {unit}")
-    lines.append(f"Units in B: {len(result['units_b'])}")
-    for i, unit in enumerate(result["units_b"], 1):
-        lines.append(f"  {i}. {unit}")
-    lines.append("-" * 60)
-    lines.append(f"Matching Units: {result['matching_units']}")
-    lines.append("=" * 60)
+    lines.append("ISCC Comparison")
+    lines.append("-" * 50)
+    lines.append(f"A: {result['iscc_a']}")
+    lines.append(f"B: {result['iscc_b']}")
+    lines.append("-" * 50)
+
+    types = result.get("types", {})
+    if types:
+        lines.append(f"{'TYPE':<12} {'SCORE':>8} {'DISTANCE':>10} {'BITS':>6}")
+        for type_name, data in types.items():
+            if "match" in data:
+                match_str = "match" if data["match"] else "no match"
+                lines.append(f"{type_name:<12} {match_str:>8}")
+            else:
+                score_str = f"{data['score']:.2f}"
+                lines.append(
+                    f"{type_name:<12} {score_str:>8} {data['distance']:>10} {data['bits']:>6}"
+                )
+    else:
+        lines.append("No compatible units to compare")
+
+    lines.append("-" * 50)
+    score = result.get("score")
+    if score is not None:
+        lines.append(f"{'OVERALL':<12} {score:.2f}")
+    else:
+        lines.append("OVERALL      n/a")
 
     return "\n".join(lines)
 
@@ -126,7 +162,7 @@ Examples:
     args = parser.parse_args()
 
     # Perform comparison
-    result = compare_iscc(args.iscc_a, args.iscc_b, args.pretty)
+    result = compare_iscc(args.iscc_a, args.iscc_b)
 
     # Output results
     if args.pretty:
