@@ -8,7 +8,10 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "iscc-core>=1.0.0",
     "prek>=0.2.22",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
 ]
 
 [tool.ruff]
