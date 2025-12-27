@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-sys.path.insert(0, "skills/iscc-toolkit/tools")
+sys.path.insert(0, "iscc-toolkit/skills/iscc-toolkit/tools")
 
 from iscc_compare import compare_iscc, format_pretty, main
 

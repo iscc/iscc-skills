@@ -1,0 +1,12 @@
+{
+  "name": "iscc-python-developer",
+  "version": "1.0.0",
+  "description": "Python development guidance with ISCC libraries (uses DeepWiki)",
+  "author": {
+    "name": "Titusz Pan",
+    "email": "tp@iscc.io"
+  },
+  "homepage": "https://github.com/iscc/iscc-skills",
+  "keywords": ["iscc", "python", "development", "sdk"],
+  "skills": "./skills/"
+}

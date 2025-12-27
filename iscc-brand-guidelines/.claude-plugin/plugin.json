@@ -1,0 +1,12 @@
+{
+  "name": "iscc-brand-guidelines",
+  "version": "1.0.0",
+  "description": "ISCC brand colors, typography, and logo assets for visual identity",
+  "author": {
+    "name": "Titusz Pan",
+    "email": "tp@iscc.io"
+  },
+  "homepage": "https://github.com/iscc/iscc-skills",
+  "keywords": ["iscc", "branding", "design", "visual-identity"],
+  "skills": "./skills/"
+}

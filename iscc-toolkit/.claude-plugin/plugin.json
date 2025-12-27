@@ -1,0 +1,12 @@
+{
+  "name": "iscc-toolkit",
+  "version": "1.0.0",
+  "description": "18 standalone PEP 723 scripts for ISCC operations (uvx-runnable)",
+  "author": {
+    "name": "Titusz Pan",
+    "email": "tp@iscc.io"
+  },
+  "homepage": "https://github.com/iscc/iscc-skills",
+  "keywords": ["iscc", "toolkit", "scripts", "cli"],
+  "skills": "./skills/"
+}

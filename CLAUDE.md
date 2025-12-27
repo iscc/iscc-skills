@@ -4,49 +4,58 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains Claude Code skills for the ISCC (International Standard Content Code) ecosystem. Skills are packaged knowledge modules that extend Claude's capabilities for ISCC-related tasks.
+This repository is an ISCC (International Standard Content Code) **marketplace** for Claude Code plugins. Each plugin contains a single skill that extends Claude's capabilities for ISCC-related tasks.
 
 ## Current Status
 
-**4 skills implemented:**
+**4 plugins (1 skill each):**
 - `iscc-brand-guidelines` - Brand colors, typography, logo assets for ISCC visual identity
 - `iscc-python-developer` - Python development guidance with ISCC libraries (uses DeepWiki)
 - `iscc-standards-expert` - ISO 24138:2024 specification knowledge (uses DeepWiki)
 - `iscc-toolkit` - 18 standalone PEP 723 scripts for ISCC operations (uvx-runnable)
 
-**Not yet implemented:**
-- `.skill` package files (zip archives for distribution)
-- Tests
-
 ## Repository Structure
 
 ```
-iscc-skills/
-├── .claude-plugin/marketplace.json  # Plugin metadata for skill distribution
-├── skills/                          # Individual skill definitions
-│   ├── iscc-brand-guidelines/       # Brand colors, typography, logo assets
-│   │   ├── SKILL.md
-│   │   └── assets/                  # PNG logos and favicon
-│   ├── iscc-python-developer/       # Python development with ISCC libraries
-│   │   ├── SKILL.md
-│   │   └── references/              # Guidelines and repo documentation
-│   ├── iscc-standards-expert/       # ISO 24138:2024 specification knowledge
-│   │   └── SKILL.md
-│   └── iscc-toolkit/                # Standalone scripts for ISCC operations
+iscc-skills/                              # Marketplace repository
+├── marketplace.json                      # Marketplace manifest (lists all plugins)
+│
+├── iscc-brand-guidelines/                # Plugin 1
+│   ├── .claude-plugin/plugin.json
+│   └── skills/iscc-brand-guidelines/
 │       ├── SKILL.md
-│       ├── references/              # Usage guide
-│       └── tools/                   # 17 Python scripts (PEP 723)
-├── notes/                           # Design reference materials
-└── pyproject.toml                   # Project configuration (uv/ruff)
+│       └── assets/                       # PNG logos and favicon
+│
+├── iscc-python-developer/                # Plugin 2
+│   ├── .claude-plugin/plugin.json
+│   └── skills/iscc-python-developer/
+│       ├── SKILL.md
+│       └── references/                   # Guidelines and repo documentation
+│
+├── iscc-standards-expert/                # Plugin 3
+│   ├── .claude-plugin/plugin.json
+│   └── skills/iscc-standards-expert/
+│       └── SKILL.md
+│
+├── iscc-toolkit/                         # Plugin 4
+│   ├── .claude-plugin/plugin.json
+│   └── skills/iscc-toolkit/
+│       ├── SKILL.md
+│       ├── references/                   # Usage guide
+│       └── tools/                        # 18 Python scripts (PEP 723)
+│
+├── notes/                                # Design reference materials
+└── pyproject.toml                        # Project configuration (uv/ruff)
 ```
 
-## Skill Architecture
+## Plugin Architecture
 
-Each skill is a directory containing:
-- `SKILL.md` - Main skill definition with YAML frontmatter (`name`, `description`) and markdown content
-- `references/` - Optional supporting documentation
-- `assets/` - Optional binary assets (images, etc.)
-- `tools/` - Optional executable scripts (iscc-toolkit only)
+Each plugin is a directory containing:
+- `.claude-plugin/plugin.json` - Plugin manifest with name, version, description
+- `skills/<skill-name>/SKILL.md` - Skill definition with YAML frontmatter
+- `skills/<skill-name>/references/` - Optional supporting documentation
+- `skills/<skill-name>/assets/` - Optional binary assets (images, etc.)
+- `skills/<skill-name>/tools/` - Optional executable scripts
 
 ## Commands
 

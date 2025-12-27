@@ -1,0 +1,12 @@
+{
+  "name": "iscc-standards-expert",
+  "version": "1.0.0",
+  "description": "ISO 24138:2024 specification knowledge (uses DeepWiki)",
+  "author": {
+    "name": "Titusz Pan",
+    "email": "tp@iscc.io"
+  },
+  "homepage": "https://github.com/iscc/iscc-skills",
+  "keywords": ["iscc", "iso-24138", "standards", "specifications"],
+  "skills": "./skills/"
+}
