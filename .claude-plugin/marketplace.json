@@ -12,22 +12,22 @@
     {
       "name": "iscc-brand-guidelines",
       "description": "ISCC brand colors, typography, and logo assets for visual identity",
-      "source": "../iscc-brand-guidelines"
+      "source": "./iscc-brand-guidelines"
     },
     {
       "name": "iscc-python-developer",
       "description": "Python development guidance with ISCC libraries (uses DeepWiki)",
-      "source": "../iscc-python-developer"
+      "source": "./iscc-python-developer"
     },
     {
       "name": "iscc-standards-expert",
       "description": "ISO 24138:2024 specification knowledge (uses DeepWiki)",
-      "source": "../iscc-standards-expert"
+      "source": "./iscc-standards-expert"
     },
     {
       "name": "iscc-toolkit",
       "description": "18 standalone PEP 723 scripts for ISCC operations (uvx-runnable)",
-      "source": "../iscc-toolkit"
+      "source": "./iscc-toolkit"
     }
   ]
 }
