@@ -18,7 +18,8 @@ This repository is an ISCC (International Standard Content Code) **marketplace**
 
 ```
 iscc-skills/                              # Marketplace repository
-├── marketplace.json                      # Marketplace manifest (lists all plugins)
+├── .claude-plugin/
+│   └── marketplace.json                  # Marketplace manifest (lists all plugins)
 │
 ├── iscc-brand-guidelines/                # Plugin 1
 │   ├── .claude-plugin/plugin.json
